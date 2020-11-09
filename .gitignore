@@ -1,0 +1,8 @@
+.env
+.vscode
+.python-version
+
+files/
+logs/
+plots/
+tmp/
