@@ -64,9 +64,16 @@ class BufferedAESGCM:
     def _vault_init(self):
         if 'VAULT_ADDR' not in os.environ:
             raise Exception("VAULT_ADDR environment variable not set")
-        if 'VAULT_TOKEN' not in os.environ:
-            raise Exception("VAULT_TOKEN environment variable not set")
-        self.vault = hvac.Client(url=os.environ.get('VAULT_ADDR'), token=os.environ.get('VAULT_TOKEN'))
+        if 'APP_ROLE_ID' not in os.environ:
+            raise Exception("APP_ROLE_ID environment variable not set")
+        if 'APP_SECRET_ID' not in os.environ:
+            raise Exception("APP_SECRET_ID environment variable not set")
+        
+        self.vault = hvac.Client(url=os.environ.get('VAULT_ADDR'))
+        self.vault.auth_approle(os.environ.get('APP_ROLE_ID'), os.environ.get('APP_SECRET_ID'))
+        
+        if not self.vault.is_authenticated():
+            raise Exception("Authentication Failed")
     
     def _vault_unwrap_datakey(self,name, ciphertext):
         vault_response = self.vault.secrets.transit.decrypt_data(
