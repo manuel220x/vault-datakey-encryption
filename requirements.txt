@@ -2,5 +2,4 @@ azure-storage-blob==12.5.0
 pycryptodome==3.9.8
 cryptography==3.1.1
 aiohttp==3.6.3
-async-hvac==0.6.1
 hvac==0.10.5
